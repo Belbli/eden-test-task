@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    platform: postgres
+    url: ${datasource.url:jdbc:postgresql://localhost:5432/authorizationdata}
+    username: ${datasource.username:postgres}
+    password: ${datasource.password:}
+    driverClassName: org.postgresql.Driver
+flyway:
+  validateMigrationNaming: true

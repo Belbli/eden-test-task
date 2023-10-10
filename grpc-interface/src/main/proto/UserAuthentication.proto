@@ -1,0 +1,33 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package tt.authorization;
+
+import "google/protobuf/wrappers.proto";
+
+enum Role {
+    ADMIN = 0;
+    USER = 1;
+    UNKNOWN = 2;
+}
+
+message UserAuthenticationRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message NewUserRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message UserDto {
+    string id = 1;
+    string email = 2;
+    Role role = 3;
+}
+
+service UserAuthorizationService {
+    rpc createNewUser(NewUserRequest) returns (UserDto);
+
+    rpc authorize(UserAuthenticationRequest) returns (UserDto);
+}

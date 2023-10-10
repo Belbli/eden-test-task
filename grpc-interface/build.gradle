@@ -1,0 +1,62 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id "com.google.protobuf" version "0.9.4"
+}
+
+group = 'tt.test-task-grpc-api'
+version = '0.0.1'
+
+sourceCompatibility = '17'
+
+ext {
+    grpcVersion = '1.58.0'
+    protobufVersion = '3.23.4'
+}
+
+repositories {
+    gradlePluginPortal()
+    mavenLocal()
+    mavenCentral()
+}
+
+
+dependencies {
+    runtimeOnly "io.grpc:grpc-netty-shaded:$grpcVersion"
+    implementation "io.grpc:grpc-protobuf:$grpcVersion"
+    implementation "io.grpc:grpc-stub:$grpcVersion"
+    if (JavaVersion.current().isJava9Compatible()) {
+        implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+    }
+    def generatedFilesBaseDir = "$projectDir/src/generated"
+    clean {
+        delete generatedFilesBaseDir
+    }
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
